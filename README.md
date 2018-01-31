@@ -1,3 +1,5 @@
+This script is a clone of the same script from https://github.com/blackrosezy/build-libcurl-windows, the only difference being that the old wget was replaced by a new wget. This fixes an issue where libcurl could not be downloaded during the execution of the script.
+
 Auto download & compile libcurl
 -----------
 This batch script will automatically download the latest libcurl source code and build it using Visual Studio compiler.
@@ -12,7 +14,7 @@ Supported Visual Studio are:
 *  Visual Studio 2015 [![Build status](https://ci.appveyor.com/api/projects/status/ykm8b06h3x7855eo?svg=true)](https://ci.appveyor.com/project/blackrosezy/build-libcurl-windows-unln0)
 
 
-*Note-1*: All versions of **Visual Studio Express are unsupported**.
+*Note-1*: All version of **Visual Studio express are unsupported**.
 
 *Note-2*: This script is using third-party open source software
 * `bin/7-zip` http://www.7-zip.org/download.html
@@ -22,10 +24,6 @@ Supported Visual Studio are:
 Usage :
 
     $ build.bat
-
-To build using /MT rather than /MD:
-
-    $ build.bat -static 
 
 Output :
 
