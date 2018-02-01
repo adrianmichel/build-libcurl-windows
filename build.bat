@@ -1,4 +1,4 @@
-@echo off
+rem @echo off
 setlocal EnableDelayedExpansion 
 
 set PROGFILES=%ProgramFiles%
@@ -101,7 +101,7 @@ set MKDIR="%CD%\bin\unxutils\mkdir.exe"
 set SEVEN_ZIP="%CD%\bin\7-zip\7za.exe"
 set WGET="%CD%\bin\unxutils\wget.exe"
 set XIDEL="%CD%\bin\xidel\xidel.exe"
-set SED="%CD%\bin\unixutils\sed-4.4.exe
+set SED="%CD%\bin\unxutils\sed-4.4.exe"
 
 REM Housekeeping
 %RM% -rf tmp_*
@@ -125,10 +125,15 @@ REM Extract downloaded zip file to tmp_libcurl
 %SEVEN_ZIP% x curl.zip -y -otmp_libcurl | FIND /V "ing  " | FIND /V "Igor Pavlov"
 
 cd tmp_libcurl\curl-*
-REN modify curl header to include extra header file
-%SED% "s/#define HEADER_CURL_CONFIG_WIN32_H/\n\n#define HEADER_CURL_CONFIG_WIN32_H\n#define WINVER 0X0501\n#define _WIN32_WINNT 0X0501\n/g" lib\config-win32.h > lib\tmp.h
+echo current dir: %CD%
+REM modify curl header to include extra header file
+echo running SED
+%SED% "s/#define HEADER_CURL_CONFIG_WIN32_H/\n#define HEADER_CURL_CONFIG_WIN32_H\n\n#define WINVER 0X0501\n#define _WIN32_WINNT 0X0501\n#define _USING_V110_SDK71_\n\n/g" lib\config-win32.h > tmp.h
+echo removing config-win32.h
 %RM% lib\config-win32.h
-%CP% lib\tmp.h lib\config-win32.h
+echo copying tmp.h
+%CP% tmp.h lib\config-win32.h
+%RM% tmp.h
 
 cd winbuild
 
