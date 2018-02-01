@@ -124,10 +124,11 @@ echo Downloading latest curl...
 REM Extract downloaded zip file to tmp_libcurl
 %SEVEN_ZIP% x curl.zip -y -otmp_libcurl | FIND /V "ing  " | FIND /V "Igor Pavlov"
 
+cd tmp_libcurl\curl-*
 REN modify curl header to include extra header file
-%SED% -i 's/#define HEADER_CURL_CONFIG_WIN32_H/#define HEADER_CURL_CONFIG_WIN32_H\n#define WINVER 0X0501\n#define _WIN32_WINNT 0X0501\n/g' tmp_libcurl\lib\config-win32.h
+%SED% -i 's/#define HEADER_CURL_CONFIG_WIN32_H/#define HEADER_CURL_CONFIG_WIN32_H\n#define WINVER 0X0501\n#define _WIN32_WINNT 0X0501\n/g' lib\config-win32.h
 
-cd tmp_libcurl\curl-*\winbuild
+cd winbuild
 
 if %COMPILER_VER% == "6" (
 	set VCVERSION = 6
