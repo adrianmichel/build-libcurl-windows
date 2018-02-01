@@ -126,7 +126,9 @@ REM Extract downloaded zip file to tmp_libcurl
 
 cd tmp_libcurl\curl-*
 REN modify curl header to include extra header file
-%SED% -i 's/#define HEADER_CURL_CONFIG_WIN32_H/#define HEADER_CURL_CONFIG_WIN32_H\n#define WINVER 0X0501\n#define _WIN32_WINNT 0X0501\n/g' lib\config-win32.h
+%SED% "s/#define HEADER_CURL_CONFIG_WIN32_H/\n\n#define HEADER_CURL_CONFIG_WIN32_H\n#define WINVER 0X0501\n#define _WIN32_WINNT 0X0501\n/g" lib\config-win32.h > lib\tmp.h
+%RM% lib\config-win32.h
+%CP% lib\tmp.h lib\config-win32.h
 
 cd winbuild
 
