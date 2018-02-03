@@ -101,6 +101,7 @@ set MKDIR="%CD%\bin\unxutils\mkdir.exe"
 set SEVEN_ZIP="%CD%\bin\7-zip\7za.exe"
 set WGET="%CD%\bin\unxutils\wget.exe"
 set XIDEL="%CD%\bin\xidel\xidel.exe"
+set SED="%CD%\bin\unxutils\sed-4.4.exe"
 
 REM Housekeeping
 %RM% -rf tmp_*
@@ -123,7 +124,24 @@ echo Downloading latest curl...
 REM Extract downloaded zip file to tmp_libcurl
 %SEVEN_ZIP% x curl.zip -y -otmp_libcurl | FIND /V "ing  " | FIND /V "Igor Pavlov"
 
-cd tmp_libcurl\curl-*\winbuild
+cd tmp_libcurl\curl-*
+rem echo current dir: %CD%
+
+if [%2] == [] goto build
+
+REM modify curl header to include extra header file
+%CP% %2 lib\extra.h
+rem echo running SED
+%SED% "s/\(#define HEADER_CURL_CONFIG_WIN32_H\)/\1\n\n#include \"extra.h\"\n\n/g" lib\config-win32.h > tmp.h
+rem echo removing config-win32.h
+%RM% lib\config-win32.h
+rem echo copying tmp.h
+%CP% tmp.h lib\config-win32.h
+%RM% tmp.h
+
+:build
+
+cd winbuild
 
 if %COMPILER_VER% == "6" (
 	set VCVERSION = 6
