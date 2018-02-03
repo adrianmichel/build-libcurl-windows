@@ -126,14 +126,20 @@ REM Extract downloaded zip file to tmp_libcurl
 
 cd tmp_libcurl\curl-*
 rem echo current dir: %CD%
+
+if [%2] == [] goto build
+
 REM modify curl header to include extra header file
+%CP% %2 lib\extra.h
 rem echo running SED
-%SED% "s/#define HEADER_CURL_CONFIG_WIN32_H/\n#define HEADER_CURL_CONFIG_WIN32_H\n\n#define WINVER 0X0501\n#define _WIN32_WINNT 0X0501\n#define _USING_V110_SDK71_\n\n/g" lib\config-win32.h > tmp.h
+%SED% "s/\(#define HEADER_CURL_CONFIG_WIN32_H\)/\1\n\n#include extra.h\n\n/g" lib\config-win32.h > tmp.h
 rem echo removing config-win32.h
 %RM% lib\config-win32.h
 rem echo copying tmp.h
 %CP% tmp.h lib\config-win32.h
 %RM% tmp.h
+
+:build
 
 cd winbuild
 
